@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log.iq — A Fast, Intelligent Ledger</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --teal: #2ec4c4;
+  --teal-dark: #1a9f9f;
+  --teal-light: #5dd6d6;
+  --teal-bg: #e6f7f7;
+  --teal-bg2: #c8eaea;
+  --page-bg: #f0fafa;
+  --white: #ffffff;
+  --text: #1a2332;
+  --text-mid: #3d5060;
+  --text-muted: #7a9aaa;
+  --border: #d4eaea;
+  --card-shadow-hover: 0 12px 40px rgba(46,196,196,0.18), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+body { font-family: 'Inter', sans-serif; background: var(--page-bg); color: var(--text); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center;
+  padding: 14px 56px;
+  background: rgba(240,250,250,0.93);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-wordmark { font-size: 1.3rem; font-weight: 900; color: var(--text); letter-spacing: -0.03em; }
+.nav-wordmark span { color: var(--teal); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 130px 24px 80px; position: relative; overflow: hidden;
+}
+.hero-grad { position: absolute; inset: 0; z-index: 0; background: linear-gradient(155deg, #e0f5f5 0%, #f0fafa 50%, #d8f2f0 100%); }
+.hero-orb1 { position: absolute; width: 540px; height: 540px; border-radius: 50%; top: -120px; right: -100px; background: radial-gradient(circle, rgba(46,196,196,0.13) 0%, transparent 70%); z-index: 0; }
+.hero-orb2 { position: absolute; width: 380px; height: 380px; border-radius: 50%; bottom: -60px; left: -80px; background: radial-gradient(circle, rgba(46,196,196,0.09) 0%, transparent 70%); z-index: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1px solid var(--teal-bg2); border-radius: 100px;
+  padding: 6px 18px 6px 10px; font-size: 0.72rem; font-weight: 800;
+  color: var(--teal-dark); letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 28px; position: relative; z-index: 1;
+  box-shadow: 0 3px 14px rgba(46,196,196,0.15);
+  animation: up 0.5s ease both;
+}
+.badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+h1 { font-size: clamp(2.6rem, 6.5vw, 5rem); font-weight: 900; line-height: 1.06; letter-spacing: -0.03em; color: var(--text); position: relative; z-index: 1; animation: up 0.5s 0.08s ease both; }
+h1 em { font-style: normal; color: var(--teal); }
+.hero-sub { max-width: 510px; margin: 22px auto 0; font-size: 1.05rem; line-height: 1.7; color: var(--text-mid); position: relative; z-index: 1; animation: up 0.5s 0.16s ease both; }
+
+.flow { display: flex; align-items: center; gap: 6px; margin: 26px auto 0; justify-content: center; position: relative; z-index: 1; animation: up 0.5s 0.22s ease both; }
+.flow-pill { background: var(--white); border: 1px solid var(--border); border-radius: 100px; padding: 7px 18px; font-size: 0.8rem; font-weight: 600; color: var(--text-mid); }
+.flow-pill.hi { background: var(--teal); color: #fff; border-color: var(--teal); }
+.flow-arr { color: var(--teal); font-weight: 700; font-size: 1rem; }
+
+/* PHONE MOCKUP */
+.mockup { margin-top: 58px; position: relative; z-index: 1; animation: up 0.7s 0.28s ease both; }
+.phone { width: 238px; margin: 0 auto; background: var(--white); border-radius: 34px; border: 1.5px solid var(--border); padding: 18px 12px; box-shadow: 0 36px 80px rgba(46,196,196,0.14), 0 8px 24px rgba(0,0,0,0.07); }
+.pill { width: 56px; height: 8px; background: #e0eeee; border-radius: 100px; margin: 0 auto 14px; }
+.pscreen { background: var(--page-bg); border-radius: 20px; padding: 14px 12px; }
+.ptop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; }
+.pname { font-size: 0.88rem; font-weight: 900; color: var(--teal); }
+.pname span { color: var(--text); }
+.picons { font-size: 0.68rem; color: var(--text-muted); }
+.pinput { background: var(--white); border: 1px solid var(--border); border-radius: 9px; padding: 9px 12px; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
+.pbtn { background: var(--teal); color: #fff; border-radius: 8px; padding: 9px; text-align: center; font-size: 0.63rem; font-weight: 800; letter-spacing: 0.07em; margin-bottom: 10px; }
+.psync { font-size: 0.57rem; color: var(--teal-dark); font-weight: 600; margin-bottom: 10px; }
+.pledger { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.pltitle { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); }
+.plsearch { color: var(--teal); font-size: 0.75rem; }
+.pcard { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 11px; }
+.pcard-q { font-size: 0.67rem; font-weight: 800; color: var(--teal-dark); margin-bottom: 5px; }
+.pcard-b { font-size: 0.59rem; color: var(--text-mid); line-height: 1.55; }
+.pcard-b s { text-decoration: none; color: var(--text-muted); }
+
+/* STATS STRIP */
+.stats { background: var(--teal); display: flex; justify-content: center; flex-wrap: wrap; }
+.sbox { flex: 1; min-width: 160px; text-align: center; padding: 26px 20px; border-right: 1px solid rgba(255,255,255,0.2); }
+.sbox:last-child { border-right: none; }
+.sn { display: block; font-size: 1.55rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
+.sl { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.75); letter-spacing: 0.07em; text-transform: uppercase; }
+
+/* SECTIONS */
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 40px; }
+.sec { padding: 96px 0; }
+.sec-lbl { display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-dark); padding: 4px 12px; background: var(--teal-bg); border-radius: 100px; margin-bottom: 14px; }
+.sec-h { font-size: clamp(1.85rem, 3.4vw, 2.7rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.025em; }
+.sec-h em { font-style: normal; color: var(--teal); }
+.sec-p { font-size: 0.98rem; color: var(--text-mid); line-height: 1.65; margin-top: 14px; max-width: 480px; }
+
+/* FEATURES */
+.feat-wrap { background: var(--white); }
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(248px, 1fr)); gap: 18px; margin-top: 50px; }
+.fcard { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 28px 24px; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
+.fcard:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-hover); border-color: rgba(46,196,196,0.4); }
+.ficon { width: 48px; height: 48px; border-radius: 14px; background: var(--teal-bg); border: 1.5px solid var(--teal-bg2); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 18px; }
+.ftitle { font-size: 0.97rem; font-weight: 800; color: var(--text); margin-bottom: 9px; }
+.fdesc { font-size: 0.86rem; color: var(--text-mid); line-height: 1.65; }
+
+/* HOW IT WORKS */
+.how-wrap { background: linear-gradient(155deg, #e0f5f5 0%, #f0fafa 100%); }
+.how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 54px; position: relative; }
+.how-grid::after { content: ''; position: absolute; top: 42px; left: calc(33.33% - 4px); right: calc(33.33% - 4px); height: 2px; background: repeating-linear-gradient(90deg, var(--teal) 0, var(--teal) 6px, transparent 6px, transparent 14px); opacity: 0.4; }
+.hstep { text-align: center; padding: 0 18px; }
+.hnum { width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 22px; background: var(--teal); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 8px 28px rgba(46,196,196,0.32); }
+.hey { font-size: 0.63rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 6px; }
+.hhead { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+.hhead em { font-style: normal; color: var(--teal); }
+.hdesc { font-size: 0.86rem; color: var(--text-mid); line-height: 1.65; }
+.obadge { display: inline-flex; align-items: center; gap: 7px; background: var(--white); border: 1px solid var(--teal-bg2); border-radius: 10px; padding: 8px 14px; margin-top: 14px; font-size: 0.74rem; font-weight: 700; color: var(--teal-dark); }
+
+/* PILLARS */
+.pills-wrap { background: var(--white); }
+.pills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 48px; }
+.pil { background: var(--page-bg); border: 1.5px solid var(--border); border-radius: 20px; padding: 28px; display: flex; gap: 18px; align-items: flex-start; transition: transform 0.25s, box-shadow 0.25s; }
+.pil:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+.pilnum { min-width: 42px; height: 42px; border-radius: 12px; background: var(--teal); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 900; }
+.piltitle { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 7px; }
+.pildesc { font-size: 0.86rem; color: var(--text-mid); line-height: 1.65; }
+
+/* MARQUEE */
+.mq-wrap { overflow: hidden; background: var(--teal-bg); border-top: 1px solid var(--teal-bg2); border-bottom: 1px solid var(--teal-bg2); padding: 14px 0; }
+.mq-track { display: flex; white-space: nowrap; animation: mq 22s linear infinite; }
+.mq-item { padding: 0 26px; font-size: 0.78rem; font-weight: 700; color: var(--teal-dark); letter-spacing: 0.06em; text-transform: uppercase; border-right: 2px solid var(--teal-bg2); }
+@keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* CTA */
+.cta-wrap { background: var(--teal); text-align: center; padding: 100px 24px; }
+.cta-wrap h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; color: #fff; letter-spacing: -0.03em; line-height: 1.1; }
+.cta-wrap p { font-size: 1rem; color: rgba(255,255,255,0.82); margin: 18px auto 0; max-width: 450px; line-height: 1.65; }
+
+/* FOOTER */
+footer { background: var(--white); border-top: 1px solid var(--border); padding: 34px 56px; display: flex; align-items: center; }
+.fl { display: flex; align-items: center; gap: 10px; }
+.fw { font-size: 1.1rem; font-weight: 900; color: var(--text); letter-spacing: -0.02em; }
+.fw span { color: var(--teal); }
+.ftag { font-size: 0.76rem; color: var(--text-muted); margin-left: 8px; }
+
+/* ANIMATIONS */
+@keyframes up { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav { padding: 13px 20px; }
+  .wrap { padding: 0 20px; }
+  .sec { padding: 60px 0; }
+  .how-grid { grid-template-columns: 1fr; }
+  .how-grid::after { display: none; }
+  .pills-grid { grid-template-columns: 1fr; }
+  footer { padding: 26px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-wordmark">Log<span>.</span>iq</span>
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grad"></div>
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+
+  <div class="badge"><div class="badge-dot"></div>Personal Knowledge Engine</div>
+
+  <h1>Stop forgetting<br>what <em>matters.</em><br>Start logging<br>what works.</h1>
+
+  <p class="hero-sub">Log.iq is your personal knowledge engine — built for speed, clarity, and instant recall. Capture the small but critical details you encounter every day and never lose them again.</p>
+
+  <div class="flow">
+    <div class="flow-pill hi">Capture</div>
+    <span class="flow-arr">›</span>
+    <div class="flow-pill">Store</div>
+    <span class="flow-arr">›</span>
+    <div class="flow-pill">Retrieve instantly</div>
+  </div>
+
+  <div class="mockup">
+    <div class="phone">
+      <div class="pill"></div>
+      <div class="pscreen">
+        <div class="ptop">
+          <div class="pname">Log<span>.iq</span></div>
+          <div class="picons">? 🔑</div>
+        </div>
+        <div class="pinput">Start typing to remember…</div>
+        <div class="pbtn">LOG KNOWLEDGE</div>
+        <div class="psync">✓ Sync. Complete. Saved to Ledger</div>
+        <div class="pledger">
+          <div class="pltitle">My Ledger</div>
+          <div class="plsearch">⌕</div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-q">Q: Kitchen lighting</div>
+          <div class="pcard-b">
+            <s>○</s> Layer ambient, task &amp; accent lighting<br>
+            <s>○</s> Color temp 3000–4000K<br>
+            <s>○</s> Prioritize under-cabinet task lighting<br>
+            <s>○</s> Install dimmer switches for mood control
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="sbox reveal"><span class="sn">Zero</span><span class="sl">Folders / Clutter</span></div>
+  <div class="sbox reveal"><span class="sn">Instant</span><span class="sl">Retrieval</span></div>
+  <div class="sbox reveal"><span class="sn">100%</span><span class="sl">Offline Search</span></div>
+  <div class="sbox reveal"><span class="sn">"Think Less"</span><span class="sl">Recall Everything</span></div>
+</div>
+
+<div class="feat-wrap" id="features">
+  <div class="wrap sec">
+    <div class="reveal">
+      <div class="sec-lbl">Features</div>
+      <div class="sec-h">Everything you need.<br><em>Nothing you don't.</em></div>
+      <p class="sec-p">No folders. No clutter. No overthinking. Just pure, fast knowledge capture — from technical specs to everyday solutions.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="fcard reveal">
+        <div class="ficon">⚡</div>
+        <div class="ftitle">Atomic Logging</div>
+        <div class="fdesc">Capture single fragments of useful information instantly with zero friction. One tap. Logged forever. No forms, no decision-making.</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">🔍</div>
+        <div class="ftitle">Offline Semantic Search</div>
+        <div class="fdesc">Find anything even if you don't remember exact words — completely offline. Search "bulb" and surface your lighting entry automatically.</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">📋</div>
+        <div class="ftitle">Personal Ledger</div>
+        <div class="fdesc">Every entry organised in your scrollable ledger. No folders, no tagging required. Just instant, always-ready retrieval on demand.</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">🔧</div>
+        <div class="ftitle">Built for Utility</div>
+        <div class="fdesc">Optimised for real-world data — configs, model numbers, colour codes, specs. Not long-form journaling. Built for the details that matter.</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">📴</div>
+        <div class="ftitle">Internet to Log. Offline to Search.</div>
+        <div class="fdesc">Uses internet once to intelligently process and save your entry. After that, your entire ledger and all search works completely offline — always.</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="ficon">🔒</div>
+        <div class="ftitle">Fully Encrypted</div>
+        <div class="fdesc">All entries are encrypted and synced instantly. Your knowledge stays private, secure, and accessible on any device — even without a connection.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-item">Capture →</span><span class="mq-item">Store →</span><span class="mq-item">Retrieve Instantly →</span><span class="mq-item">Think Less →</span><span class="mq-item">Recall Everything →</span><span class="mq-item">Zero Clutter →</span><span class="mq-item">Offline Search →</span><span class="mq-item">Your Brain Forgets →</span><span class="mq-item">Log.iq Doesn't →</span>
+    <span class="mq-item">Capture →</span><span class="mq-item">Store →</span><span class="mq-item">Retrieve Instantly →</span><span class="mq-item">Think Less →</span><span class="mq-item">Recall Everything →</span><span class="mq-item">Zero Clutter →</span><span class="mq-item">Offline Search →</span><span class="mq-item">Your Brain Forgets →</span><span class="mq-item">Log.iq Doesn't →</span>
+  </div>
+</div>
+
+<div class="how-wrap" id="how">
+  <div class="wrap sec">
+    <div class="reveal" style="text-align:center">
+      <div class="sec-lbl">End-to-End Workflow</div>
+      <div class="sec-h" style="font-size:clamp(1.85rem,3.4vw,2.7rem)">Your brain forgets.<br><em>Log.iq doesn't.</em></div>
+    </div>
+    <div class="how-grid">
+      <div class="hstep reveal">
+        <div class="hnum">01</div>
+        <div class="hey">Input</div>
+        <div class="hhead"><em>Atomic</em> Logging</div>
+        <div class="hdesc">Type a single piece of information and tap Log Knowledge. The app uses internet once to intelligently process and structure your entry before saving it.</div>
+        <div class="obadge">🌐 Internet used to log</div>
+      </div>
+      <div class="hstep reveal">
+        <div class="hnum">02</div>
+        <div class="hey">Storage</div>
+        <div class="hhead">Personal <em>Ledger</em></div>
+        <div class="hdesc">Fully encrypted and instantly synced. Every entry lives in your scrollable personal ledger — organised without any folders or tagging required.</div>
+        <div class="obadge">✅ Stored locally on device</div>
+      </div>
+      <div class="hstep reveal">
+        <div class="hnum">03</div>
+        <div class="hey">Retrieval</div>
+        <div class="hhead">Instant <em>Search</em></div>
+        <div class="hdesc">Intelligent semantic matching — find results by context or keywords, even if you don't remember exact words. Works completely offline, always.</div>
+        <div class="obadge">📴 100% offline — no internet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pills-wrap">
+  <div class="wrap sec">
+    <div class="reveal">
+      <div class="sec-lbl">Core Pillars</div>
+      <div class="sec-h">The principles behind <em>Log.iq</em></div>
+    </div>
+    <div class="pills-grid">
+      <div class="pil reveal">
+        <div class="pilnum">01</div>
+        <div>
+          <div class="piltitle">Minimalist Input</div>
+          <div class="pildesc">Log atomic pieces of info with a minimalist UI built for maximum capture speed. No overhead, no decision fatigue — just type and log.</div>
+        </div>
+      </div>
+      <div class="pil reveal">
+        <div class="pilnum">02</div>
+        <div>
+          <div class="piltitle">Encrypted Storage</div>
+          <div class="pildesc">Fully encrypted, instantly synced, and ready for use on any device. Your personal ledger is always available — even without a connection.</div>
+        </div>
+      </div>
+      <div class="pil reveal">
+        <div class="pilnum">03</div>
+        <div>
+          <div class="piltitle">Offline Semantic Retrieval</div>
+          <div class="pildesc">Intelligent semantic matching that finds results by context or keywords — entirely offline. No server calls. No latency. Just instant answers.</div>
+        </div>
+      </div>
+      <div class="pil reveal">
+        <div class="pilnum">04</div>
+        <div>
+          <div class="piltitle">Real-World Utility</div>
+          <div class="pildesc">Optimised for specs, configs, codes, and practical tips — not long-form journaling. Built for the kind of knowledge your brain forgets most.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-wrap" id="download">
+  <h2>The small things matter.<br>Start capturing them.</h2>
+  <p>Notes, ideas, solutions — saved forever. Log once with internet, search forever offline. No folders. No clutter. Simple as that.</p>
+</div>
+
+<footer>
+  <div class="fl">
+    <span class="fw">Log<span>.</span>iq</span>
+    <span class="ftag">— A fast, intelligent ledger</span>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').style.padding = window.scrollY > 60 ? '10px 56px' : '14px 56px';
+  });
+</script>
+</body>
+</html>
